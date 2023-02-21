@@ -1,6 +1,11 @@
 import 'dart:async';
 
+import 'package:workers/model/bankmodel.dart';
+
+import 'package:workers/worker_manager/src/port/send_port.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
   DatabaseHelper._instance() {
@@ -36,9 +41,9 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY,
         source TEXT,
         author TEXT,
-        title TEXT, 
+        title TEXT,
         description TEXT,
-        url TEXT, 
+        url TEXT,
         urlToImage TEXT,
         publishedAt TEXT,
         content TEXT
@@ -62,17 +67,17 @@ class DatabaseHelper {
         id INTEGER,
         uid INTEGER,
         password TEXT,
-        first_name TEXT, 
+        first_name TEXT,
         last_name TEXT,
         username TEXT,
         email TEXT,
         avatar TEXT,
-        gender TEXT, 
+        gender TEXT,
         phone_number TEXT,
         social_insurance_number,
         date_of_birth TEXT,
         employment TEXT,
-        address TEXT, 
+        address TEXT,
         credit_card TEXT,
         subscription TEXT
       );
@@ -87,6 +92,7 @@ class DatabaseHelper {
       }
     });
   }
+
   Future<void> insertArticles(List articles) async {
     final db = await database;
     db!.transaction((txn) async {
@@ -95,6 +101,7 @@ class DatabaseHelper {
       }
     });
   }
+
   Future<void> insertBanks(List details) async {
     final db = await database;
     db!.transaction((txn) async {
@@ -103,13 +110,15 @@ class DatabaseHelper {
       }
     });
   }
-  Future<List<Map<String, dynamic>>> getCacheUser() async {
+
+  Future<List<UserData>> getCacheUser() async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db!.query(
       _randomUser,
     );
-    return results;
+    return results.map((e) => UserData.fromMap(e)).toList();
   }
+
   Future<List<Map<String, dynamic>>> getCacheArticles() async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db!.query(
@@ -117,6 +126,7 @@ class DatabaseHelper {
     );
     return results;
   }
+
   Future<List<Map<String, dynamic>>> getBankDetails() async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db!.query(
@@ -131,17 +141,25 @@ class DatabaseHelper {
       _randomUser,
     );
   }
+
   Future<int> clearCacheBank() async {
     final db = await database;
     return db!.delete(
       _bankDetails,
     );
   }
+
   Future<int> clearCacheNews() async {
     final db = await database;
     return db!.delete(
       _tblCacheArticle,
-
     );
+  }
+
+  Future<String> getdataintoLoacal(int n, TypeSendPort port) async {
+    final sharedPrefLocator = await SharedPreferences.getInstance();
+    print(
+        ">>>>>>>>>>>Stored data into pref using isolate ${sharedPrefLocator.getString("value")}");
+    return "Stored data into pref using isolate ${sharedPrefLocator.getString("value")}";
   }
 }
