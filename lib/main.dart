@@ -1,17 +1,16 @@
-import 'package:workers/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers/injection.dart';
+
 import 'bloc/getusercubit/getuser_cubit.dart';
 import 'bloc/newscubit/news_cubit.dart';
 import 'bloc/progresscubit/progress_cubit.dart';
 import 'dashbord.dart';
-import 'worker_manager/worker_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   init();
-  setup();
-  await Executor().warmUp(log: true);
+  await setup();
   runApp(const FlutterBlueApp());
 }
 

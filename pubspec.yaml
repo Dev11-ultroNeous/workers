@@ -43,6 +43,9 @@ dependencies:
   cached_network_image: ^3.0.0
   shared_preferences: ^2.0.17
   flutter_isolate: ^2.0.4
+  json_annotation: ^4.8.0
+  uuid: ^3.0.7
+
   
 
 dev_dependencies:
@@ -55,6 +58,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.3.3
+  json_serializable: ^6.6.1
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

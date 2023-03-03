@@ -1,10 +1,8 @@
 import 'dart:async';
+import 'dart:isolate';
 
-import 'package:workers/model/bankmodel.dart';
-
-import 'package:workers/worker_manager/src/port/send_port.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:workers/model/bankmodel.dart';
 
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
@@ -88,7 +86,9 @@ class DatabaseHelper {
     final db = await database;
     db!.transaction((txn) async {
       for (final data in userdata) {
-        txn.insert(_randomUser, data);
+        if (data.isNotEmpty) {
+          txn.insert(_randomUser, data);
+        }
       }
     });
   }
@@ -116,6 +116,7 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> results = await db!.query(
       _randomUser,
     );
+    print(">>>>>>$results");
     return results.map((e) => UserData.fromMap(e)).toList();
   }
 
@@ -156,10 +157,10 @@ class DatabaseHelper {
     );
   }
 
-  Future<String> getdataintoLoacal(int n, TypeSendPort port) async {
-    final sharedPrefLocator = await SharedPreferences.getInstance();
-    print(
-        ">>>>>>>>>>>Stored data into pref using isolate ${sharedPrefLocator.getString("value")}");
-    return "Stored data into pref using isolate ${sharedPrefLocator.getString("value")}";
+  @pragma('vm:entry-point')
+  static getdataintoLoacal(SendPort sendPort) async {
+    //   ${prefs.getString("value")}
+    print(">>>>>>>>>>>Stored data into pref using isolate q");
+    sendPort.send("Stored data into pref using isolate ");
   }
 }

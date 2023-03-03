@@ -1,9 +1,10 @@
+import 'dart:isolate';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter_isolate/flutter_isolate.dart';
 import 'package:workers/api/network.dart';
 import 'package:workers/injection.dart';
 import 'package:workers/sql/database_helper.dart';
-import 'package:workers/worker_manager/worker_manager.dart';
-import 'package:flutter/cupertino.dart';
 
 part 'progress_state.dart';
 
@@ -11,7 +12,8 @@ class ProgressCubit extends Cubit<ProgressState> {
   ProgressCubit() : super(ProgressInitial());
   var progress = 0.0;
   final DatabaseHelper databaseHelper = injection<DatabaseHelper>();
-  final NetworkApi networkApi = NetworkApi();
+
+  //static final NetworkApi networkApi = NetworkApi();
   void updateProgress() {
     emit(ProgressRunState(progress: progress));
     if (progress == 10.0) {
@@ -23,130 +25,74 @@ class ProgressCubit extends Cubit<ProgressState> {
   }
 
   void pauseIsolate() {
-    Executor().pausePool();
+    FlutterIsolate.current.pause();
     emit(ProgressPausState());
   }
 
   void resumeIsolate() {
-    Executor().resumePool();
+    FlutterIsolate.current.resume();
     updateProgress();
   }
 
   void getlocal() {
-    Executor()
-        .execute(
-          arg1: 3,
-          fun1: databaseHelper.getdataintoLoacal,
-        )
-        .then((value) => debugPrint(value));
+    syncData(DatabaseHelper.getdataintoLoacal);
     //databaseHelper.getdataintoLoacal(await databaseHelper.getCacheUser());
   }
 
   void mainIsolate() {
-    Executor()
-        .execute(
-      arg1: 3,
-      fun1: networkApi.apiOne,
-    )
-        .then((value) {
-      if (value.isNotEmpty) {
-        databaseHelper.insertUsers(value);
-        progress++;
-        updateProgress();
-      }
-    });
-    Executor()
-        .execute(
-      arg1: 2,
-      fun1: networkApi.apiTwo,
-    )
-        .then((value) {
-      if (value.isNotEmpty) {
-        databaseHelper.insertBanks(value);
-        progress++;
-        updateProgress();
-      }
-    });
-    Executor()
-        .execute(
-      arg1: 2,
-      fun1: networkApi.apiThree,
-    )
-        .whenComplete(() {
+    syncData(NetworkApi.apiOne).then((value) {
       progress++;
       updateProgress();
     });
-    Executor()
-        .execute(
-      arg1: 1,
-      fun1: networkApi.apiFour,
-    )
-        .then((value) {
-      if (value.isNotEmpty) {
-        databaseHelper.insertUsers(value);
-        progress++;
-        updateProgress();
-      }
-    });
-    Executor()
-        .execute(
-      arg1: 2,
-      fun1: networkApi.apiFive,
-    )
-        .whenComplete(() {
+    syncData(NetworkApi.apiTwo).then((value) {
       progress++;
       updateProgress();
     });
-    Executor()
-        .execute(
-      arg1: 2,
-      fun1: networkApi.apiSix,
-    )
-        .whenComplete(() {
+    syncData(NetworkApi.apiThree).then((value) {
       progress++;
       updateProgress();
     });
-    Executor()
-        .execute(
-      arg1: 2,
-      fun1: networkApi.apiSeven,
-    )
-        .then((value) {
-      if (value.isNotEmpty) {
-        databaseHelper.insertArticles(value);
-        progress++;
-        updateProgress();
-      }
-    });
-    Executor()
-        .execute(
-      arg1: 2,
-      fun1: networkApi.apiEight,
-    )
-        .whenComplete(() {
+    syncData(NetworkApi.apiFour).then((value) {
       progress++;
       updateProgress();
     });
-    Executor()
-        .execute(
-      arg1: 2,
-      fun1: networkApi.apiNine,
-    )
-        .whenComplete(() {
+    syncData(NetworkApi.apiFive).then((value) {
       progress++;
       updateProgress();
     });
-    Executor()
-        .execute(
-      arg1: 1,
-      fun1: networkApi.apiTen,
-    )
-        .then((value) {
-      if (value.isNotEmpty) {
-        databaseHelper.insertUsers(value);
-        progress++;
-        updateProgress();
-      }
+    syncData(NetworkApi.apiSix).then((value) {
+      progress++;
+      updateProgress();
+    });
+    syncData(NetworkApi.apiSeven).then((value) {
+      progress++;
+      updateProgress();
+    });
+    syncData(NetworkApi.apiEight).then((value) {
+      progress++;
+      updateProgress();
+    });
+    syncData(NetworkApi.apiNine).then((value) {
+      progress++;
+      updateProgress();
+    });
+    syncData(NetworkApi.apiTen).then((value) {
+      progress++;
+      updateProgress();
+    });
+  }
+
+  Future<void> syncData(void Function(SendPort) entryPoint) async {
+    final receivePort = ReceivePort();
+    final isolate =
+        await FlutterIsolate.spawn(entryPoint, receivePort.sendPort);
+    receivePort.listen((dynamic response) async {
+      if (response is String) {
+        print(response);
+      } else if (response is Error) {}
+      isolate.kill();
+
+      print("Kill Isolate");
     });
   }
 

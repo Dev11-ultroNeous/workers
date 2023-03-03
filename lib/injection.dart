@@ -5,7 +5,7 @@ import 'package:workers/sql/shared_prefs_helper.dart';
 
 final injection = GetIt.instance;
 
-void init() {
+void init() async{
   // helper
   injection.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
 
