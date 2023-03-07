@@ -33,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final blocValue = BlocProvider.of<ProgressCubit>(context);
-    blocValue.databaseHelper.getCacheUser();
+    ProgressCubit.databaseHelper.getCacheUser();
     return WillPopScope(
       onWillPop: () async {
         final isFirstRouteInCurrentTab =

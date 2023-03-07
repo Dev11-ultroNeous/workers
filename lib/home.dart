@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              blocValue.getlocal();
+              // blocValue.getlocal();
             },
             child: const SizedBox(
               height: 34,
