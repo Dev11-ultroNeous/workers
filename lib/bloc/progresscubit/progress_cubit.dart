@@ -105,3 +105,80 @@ class ProgressCubit extends Cubit<ProgressState> {
     databaseHelper.clearCacheNews();
   }
 }
+
+// class ProgressCubit extends Cubit<ProgressState> {
+//   ProgressCubit() : super(ProgressInitial());
+//   var progress = 0.0;
+//   final DatabaseHelper databaseHelper = injection<DatabaseHelper>();
+//   final Set<FlutterIsolate> _isolates = {};
+//  late FlutterIsolate isolate;
+//   //static final NetworkApi networkApi = NetworkApi();
+//   void updateProgress() {
+//     emit(ProgressRunState(progress: progress));
+//     if (progress == 10.0) {
+//       Future.delayed(const Duration(seconds: 1), () {
+//         emit(ProgressInitial());
+//         progress = 0.0;
+//       });
+//     }
+//   }
+//
+//   void pauseIsolate() {
+//     isolate.pause();
+//     emit(ProgressPausState());
+//   }
+//
+//   void resumeIsolate() {
+//    Completer<FlutterIsolate>().future;
+//     isolate.resume();
+//     updateProgress();
+//   }
+//
+//
+//   void mainIsolate() async {
+//     final receivePort = ReceivePort();
+//      isolate =
+//     await FlutterIsolate.spawn(apiCalling, receivePort.sendPort);
+//     receivePort.listen((dynamic response) async {
+//       if (response is String) {
+//         progress++;
+//         updateProgress();
+//       } else if (response is Error) {}
+//       if(progress==10){
+//         isolate.kill();
+//         print("Kill Isolate");
+//         emit(ProgressInitial());
+//       }
+//     });
+//   }
+//   @pragma('vm:entry-point')
+//   static void apiCalling(SendPort sendPort) async {
+//     // int i =1;
+//     // Timer.periodic(Duration(seconds:1),(timer){
+//     //   print("Timer Running From Isolate $i");
+//     //   i++;
+//     //   sendPort.send("Add succeed");
+//     // });
+//     print("Call API Four");
+//     for(int i =0; i < 10; i++) {
+//       final data = await http
+//           .get(Uri.parse('https://random-data-api.com/api/v2/users?size=$i'));
+//       final dataList = jsonDecode(data.body);
+//       print(dataList);
+//        sendPort.send("Add succeed");
+//     }
+//    // sendPort.send("Add succeed");
+//   }
+//   void getlocal() {
+//     // syncData(DatabaseHelper.getdataintoLoacal);
+//     //databaseHelper.getdataintoLoacal(await databaseHelper.getCacheUser());
+//   }
+//   void clearUserCatch() {
+//     emit(ProgressRunState(progress: 0));
+//     databaseHelper.clearCacheUser();
+//   }
+//
+//   void clearNewsCatch() {
+//     databaseHelper.clearCacheNews();
+//   }
+// }
