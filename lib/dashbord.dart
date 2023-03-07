@@ -22,17 +22,12 @@ class _DashboardState extends State<Dashboard> {
   final sharedPrefLocator = injection.get<SharedPreferenceHelper>();
   @override
   void initState() {
-    adddata();
     super.initState();
-  }
-
-  void adddata() async {
-    sharedPrefLocator.setValues(key: "value", value: "{value:value}");
   }
 
   @override
   Widget build(BuildContext context) {
-    final blocValue = BlocProvider.of<ProgressCubit>(context);
+    final progressCubit = BlocProvider.of<ProgressCubit>(context);
     ProgressCubit.databaseHelper.getCacheUser();
     return WillPopScope(
       onWillPop: () async {
@@ -60,33 +55,17 @@ class _DashboardState extends State<Dashboard> {
               if (state is ProgressRunState) {
                 return IconButton(
                     onPressed: () {
-                      blocValue.pauseIsolate();
+                      progressCubit.stopIsolate();
                     },
-                    icon: const Icon(Icons.pause));
-              } else if (state is ProgressPausState) {
-                return IconButton(
-                  onPressed: () {
-                    blocValue.resumeIsolate();
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                );
-              } else if (state is ProgressInitial) {
+                    icon: const Icon(Icons.stop));
+              } else {
                 return IconButton(
                     onPressed: () {
-                      blocValue.progress = 0;
-                      blocValue.clearUserCatch();
-                      blocValue.clearNewsCatch();
-                      blocValue.mainIsolate();
+                      progressCubit.startIsolate();
                     },
                     icon: const Icon(Icons.sync));
               }
-              return Container();
             }),
-            // IconButton(
-            //     onPressed: () {
-            //       blocValue.getlocal();
-            //     },
-            //     icon: const Icon(Icons.refresh))
           ],
         ),
         body: IndexedStack(children: [

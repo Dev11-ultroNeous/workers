@@ -12,6 +12,6 @@ class ProgressRunState extends ProgressState {
   });
 }
 
-class ProgressPausState extends ProgressState {}
+class ProgressStopState extends ProgressState {}
 
-class ProgressResumeState extends ProgressState {}
+
