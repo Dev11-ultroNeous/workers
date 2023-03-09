@@ -9,6 +9,7 @@ class NetworkApi {
   static final DatabaseHelper databaseHelper = injection<DatabaseHelper>();
   @pragma('vm:entry-point')
   static void apiOne(SendPort sendPort) async {
+    init();
     print("Call API 1");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
@@ -21,6 +22,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiTwo(SendPort sendPort) async {
+    init();
     print("Call API 2");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/banks?size=20'));
@@ -33,6 +35,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiThree(SendPort sendPort) async {
+    init();
     print("Call API 3");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
@@ -45,6 +48,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiFour(SendPort sendPort) async {
+    init();
     print("Call API 4");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
@@ -57,6 +61,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiFive(SendPort sendPort) async {
+    init();
     print("Call API 5");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/banks?size=20'));
@@ -69,6 +74,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiSix(SendPort sendPort) async {
+    init();
     print("Call API 6");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
@@ -81,6 +87,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiSeven(SendPort sendPort) async {
+    init();
     print("Call API 7");
     final data = await http.get(Uri.parse(
         'https://newsapi.org/v2/top-headlines?country=in&apiKey=40a99afefc5c4312a7fd02a620f5848a&pageSize=20'));
@@ -93,6 +100,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiEight(SendPort sendPort) async {
+    init();
     print("Call API 8");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
@@ -105,6 +113,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static void apiNine(SendPort sendPort) async {
+    init();
     print("Call API 9");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/banks?size=20'));
@@ -117,6 +126,7 @@ class NetworkApi {
 
   @pragma('vm:entry-point')
   static apiTen(SendPort sendPort) async {
+    init();
     print("Call API 10");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));

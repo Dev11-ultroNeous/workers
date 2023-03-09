@@ -36,34 +36,44 @@ class ProgressCubit extends Cubit<ProgressState> {
     clearUserCatch();
     clearNewsCatch();
     final receivePort = ReceivePort();
-    await FlutterIsolate.spawn(apiCalling, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiOne, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiTwo, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiThree, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiFour, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiFive, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiSix, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiSeven, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiEight, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiNine, receivePort.sendPort);
+    FlutterIsolate.spawn(NetworkApi.apiTen, receivePort.sendPort);
     receivePort.listen((dynamic response) async {
       if (response is String) {
         progress++;
         updateProgress();
       } else if (response is Error) {}
       if (progress == 10) {
-        print("Kill Isolate");
+        print("kill Isolate");
+        FlutterIsolate.killAll();
         emit(ProgressInitial());
       }
     });
   }
 
-  @pragma('vm:entry-point')
-  static void apiCalling(SendPort sendPort) async {
-    init();
-    setup();
-    NetworkApi.apiOne(sendPort);
-    NetworkApi.apiTwo(sendPort);
-    NetworkApi.apiThree(sendPort);
-    NetworkApi.apiFour(sendPort);
-    NetworkApi.apiFive(sendPort);
-    NetworkApi.apiSix(sendPort);
-    NetworkApi.apiSeven(sendPort);
-    NetworkApi.apiEight(sendPort);
-    NetworkApi.apiNine(sendPort);
-    NetworkApi.apiTen(sendPort);
-  }
+  // @pragma('vm:entry-point')
+  // static void apiCalling(SendPort sendPort) async {
+  //   init();
+  //   setup();
+  //   NetworkApi.apiOne(sendPort);
+  //   NetworkApi.apiTwo(sendPort);
+  //   NetworkApi.apiThree(sendPort);
+  //   NetworkApi.apiFour(sendPort);
+  //   NetworkApi.apiFive(sendPort);
+  //   NetworkApi.apiSix(sendPort);
+  //   NetworkApi.apiSeven(sendPort);
+  //   NetworkApi.apiEight(sendPort);
+  //   NetworkApi.apiNine(sendPort);
+  //   NetworkApi.apiTen(sendPort);
+  // }
 
   void getlocal() {
     // syncData(DatabaseHelper.getdataintoLoacal);
