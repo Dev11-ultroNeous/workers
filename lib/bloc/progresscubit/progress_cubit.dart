@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:workers/api/network.dart';
 import 'package:workers/injection.dart';
 import 'package:workers/sql/database_helper.dart';
@@ -17,8 +19,12 @@ class ProgressCubit extends Cubit<ProgressState> {
   //static final NetworkApi networkApi = NetworkApi();
   void updateProgress() {
     emit(ProgressRunState(progress: progress));
+    if (Platform.isAndroid) {
+      createNotification(progress.toInt());
+    }
     if (progress == 10.0) {
       Future.delayed(const Duration(seconds: 1), () {
+        _stopForegroundService();
         emit(ProgressInitial());
         progress = 0.0;
       });
@@ -30,12 +36,46 @@ class ProgressCubit extends Cubit<ProgressState> {
     FlutterIsolate.killAll();
   }
 
+  Future createNotification(int i) async {
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails('your channel id', 'your channel name',
+            channelDescription: 'your channel description',
+            importance: Importance.max,
+            ticker: 'ticker',
+            showProgress: true,
+            onlyAlertOnce:true,
+            maxProgress: 10,
+            progress: i);
+    NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails, iOS: null);
+    await flutterLocalNotificationsPlugin
+        .show(0, 'Workers', 'Syncing...', notificationDetails, payload: 'item');
+    // if(Platform.isAndroid){
+    //   await flutterLocalNotificationsPlugin
+    //       .resolvePlatformSpecificImplementation<
+    //       AndroidFlutterLocalNotificationsPlugin>()
+    //       ?.startForegroundService(1, 'plain title', 'plain body',
+    //       notificationDetails: androidNotificationDetails, payload: 'item');
+    // }else{
+
+    //  }
+  }
+
+  Future<void> _stopForegroundService() async {
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.stopForegroundService();
+  }
+
   void startIsolate() async {
+    await notificationInit();
     progress = 0;
     emit(ProgressRunState(progress: progress));
     clearUserCatch();
     clearNewsCatch();
     final receivePort = ReceivePort();
+    await createNotification(progress.toInt());
     await FlutterIsolate.spawn(apiCalling, receivePort.sendPort);
     receivePort.listen((dynamic response) async {
       if (response is String) {

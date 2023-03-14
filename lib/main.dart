@@ -1,6 +1,6 @@
-import 'package:workers/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:workers/injection.dart';
 import 'bloc/getusercubit/getuser_cubit.dart';
 import 'bloc/newscubit/news_cubit.dart';
 import 'bloc/progresscubit/progress_cubit.dart';
