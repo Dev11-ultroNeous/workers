@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:http/http.dart' as http;
@@ -10,6 +12,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiOne(SendPort sendPort) async {
     print("Call API 1");
+    print("Isolate Id 1 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 1 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
     final dataList = jsonDecode(data.body);
@@ -22,6 +26,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiTwo(SendPort sendPort) async {
     print("Call API 2");
+    print("Isolate Id 2 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 2 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/banks?size=20'));
     final dataList = jsonDecode(data.body);
@@ -34,6 +40,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiThree(SendPort sendPort) async {
     print("Call API 3");
+    print("Isolate Id 3 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 3 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
     final dataList = jsonDecode(data.body);
@@ -46,6 +54,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiFour(SendPort sendPort) async {
     print("Call API 4");
+    print("Isolate Id 4 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 4 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
     final dataList = jsonDecode(data.body);
@@ -58,6 +68,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiFive(SendPort sendPort) async {
     print("Call API 5");
+    print("Isolate Id 5 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 5 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/banks?size=20'));
     final dataList = jsonDecode(data.body);
@@ -70,6 +82,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiSix(SendPort sendPort) async {
     print("Call API 6");
+    print("Isolate Id 6 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 6 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
     final dataList = jsonDecode(data.body);
@@ -82,6 +96,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiSeven(SendPort sendPort) async {
     print("Call API 7");
+    print("Isolate Id 7 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 7 $pid");
     final data = await http.get(Uri.parse(
         'https://newsapi.org/v2/top-headlines?country=in&apiKey=40a99afefc5c4312a7fd02a620f5848a&pageSize=20'));
     final dataList = jsonDecode(data.body);
@@ -94,6 +110,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiEight(SendPort sendPort) async {
     print("Call API 8");
+    print("Isolate Id 8 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 8 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
     final dataList = jsonDecode(data.body);
@@ -106,6 +124,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static void apiNine(SendPort sendPort) async {
     print("Call API 9");
+    print("Isolate Id 9 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 9 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/banks?size=20'));
     final dataList = jsonDecode(data.body);
@@ -118,6 +138,8 @@ class NetworkApi {
   @pragma('vm:entry-point')
   static apiTen(SendPort sendPort) async {
     print("Call API 10");
+    print("Isolate Id 10 ${Service.getIsolateID(Isolate.current)}");
+    print("Process Id 10 $pid");
     final data = await http
         .get(Uri.parse('https://random-data-api.com/api/v2/users?size=20'));
     final dataList = jsonDecode(data.body);
